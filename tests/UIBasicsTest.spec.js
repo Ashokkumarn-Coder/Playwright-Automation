@@ -147,3 +147,77 @@ test('Browser context-validating Error Login', async ({browser})=>
 
 
 });
+
+test('UI controls', async ({page})=>
+{
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");    
+    const userName = page.locator('#username');
+    const signIn = page.locator('#signInBtn');
+    const dropdown=page.locator("select.form-control");
+    await dropdown.selectOption("consult"); //selecting the option with the value "consult" from the dropdown
+//await page.pause(); //pausing the test execution to allow us to inspect the page and see the selected option in the dropdown
+  await page.locator(".radiotextsty").last().click(); //locating the last radio button with the class "radiotextsty" and clicking it using the click() method
+   await page.locator("#okayBtn").click(); //locating the "Okay" button using the id selector and clicking it using the click() method //webbased popups are handled using the page.on('dialog') event listener, which allows us to listen for dialog events and interact with them accordingly
+  await expect(page.locator(".radiotextsty").last()).toBeChecked();//expecting that the last radio button with the class "radiotextsty" is checked using the toBeChecked() method, which is a specific assertion method provided by Playwright for checking if a radio button or checkbox is selected
+    //asserting that the radio button is selected using the isChecked() method, which returns a promise that resolves to a boolean value indicating whether the radio button is selected or not
+//   await page.locator(".radiotextsty").last().isChecked().then((isChecked) => {
+//         console.log("Is the radio button selected? " + isChecked); //logging the result to the console
+//     });
+
+    //checkbox
+    const checkbox= page.locator("#terms"); //locating the checkbox element using the id selector and storing it in a variable
+    await checkbox.click(); //checking the checkbox using the click() method, which simulates a user checking the checkbox
+    await expect(checkbox).toBeChecked(); //expecting that the checkbox is checked using the toBeChecked() method, which is a specific assertion method provided by Playwright for checking if a radio button or checkbox is selected
+    await checkbox.uncheck(); //unchecking the checkbox using the uncheck() method, which simulates a user unchecking the checkbox 
+    //you can keep assertion after unchecking the checkbox to verify that it is indeed unchecked
+    expect(await checkbox.isChecked()).toBeFalsy(); //asserting that the checkbox is unchecked using the isChecked() method, which returns a promise that resolves to a boolean value indicating whether the checkbox is selected or not, and then using toBeFalsy() to check if the value is false
+    //when action is inside so await we have used to ensure that the test waits for the action to complete before proceeding to the next line of code, which is important for maintaining the correct flow of the test and ensuring that assertions are made at the right time
+
+    //blinking links
+  //await expect(page.locator(".blinkingText")).toHaveAttribute("href", "https://www.rahulshettyacademy.com/"); //expecting that the blinking link with the class "blinkingText" has the specified href attribute using the toHaveAttribute() method, which is a specific assertion method provided by Playwright for checking the attributes of an element
+     const blinkingLink= page.locator("a:has-text('Free Access to InterviewQues/ResumeAssistance/Material')"); //locating the blinking link using a CSS selector that matches the anchor tag with the specified text
+     await expect(blinkingLink).toBeVisible(); //expecting that the blinking link is visible using the toBeVisible() method, which is a specific assertion method provided by Playwright for checking if an element is visible on the page
+  
+   
+
+
+    //await page.pause();
+
+});
+
+  //handling child windows and tabs 
+test.only('Child windows and tabs', async ({browser})=>
+  {
+    const context= await browser.newContext();  
+    const page= await context.newPage();    
+    const UserName =page.locator('#username');
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");   
+    const documentlInk= page.locator("[href*='documents-request']"); //locating the blinking link using a CSS selector that matches the element with the class "blinkingText"
+    //context.waitForEvent('page'); //waiting for a new page to open as a result of clicking the link, which is necessary because the link opens in a new tab or window
+    //why we write before clicking the link because we need to set up the event listener before the action that triggers the event, which in this case is clicking the link that opens a new page
+    //listen for new page pending, rejected and fulfilled events, which allows us to handle the new page that opens as a result of clicking the link and perform actions on it, such as asserting its title or interacting with its elements
+    const [newPage] = await Promise.all([
+        context.waitForEvent('page'), //waiting for a new page to open as a result of clicking the link
+        documentlInk.click(),] ) //clicking the blinking link using the click() method, which simulates a user clicking the link
+    //promise is used to handle the asynchronous nature of the operations, allowing us to wait for both the page event and the click action to complete before proceeding with the test
+    //it works like this: when the click() method is called, it triggers the opening of a new page, which in turn triggers the page event that we are waiting for with context.waitForEvent('page'). 
+    // By using Promise.all(), we can ensure that both operations are completed before we proceed with the test, allowing us to interact with the new page that has opened as a result of clicking the link
+   
+    const text = await newPage.locator(".red").textContent(); //locating the element with the class "red" on the new page and getting its text content using the textContent() method, which returns a promise that resolves to the text content of the element
+
+    //to take part of text from the text content
+    const arrayText = text.split("@") //splitting the text content into an array using the split() method, which splits the string into an array of substrings based on the specified separator, in this case, the "@" character
+    const domain= arrayText[1].split(" ")[0]; //taking the second element of the array (which contains the email address) and splitting it again to get the domain part of the email address, which is done by splitting the string based on a space character and taking the first element of the resulting array
+    console.log(domain);
+
+    await page.locator("#username").fill(domain); //filling the username input field on the original page with the extracted domain using the fill() method, which sets the value of the input field to the specified text
+    await page.pause();
+    console.log(await page.locator("#username").inputValue()); //getting the text content of the username input field and printing it to the console to verify that it has been filled correctly
+
+    //textContent() Vs innerText() method
+    //textContent() method returns the text content of an element, including all whitespace and hidden text, while innerText() method returns the visible text content of an element, excluding any hidden text or whitespace
+    //in this case, we are using textContent() to get the text content of the username input field, which will include any whitespace or hidden text that may be present in the input field. 
+    // If we were to use innerText() instead, it would only return the visible text content of the input field, which may not include any whitespace or hidden text that is present
+    //textcontext() return only the text content attached to DOM element, while innerText() return the text content that is visible to the user on the page, which may be different from the actual text content of the element due to CSS styles or other factors that affect the visibility of the text on the page    
+    //inputValue() method is used to get the current value of an input field, which is the text that is currently entered in the input field, while textContent() method is used to get the text content of an element, which may include other elements or text that is not part of the input field's value
+});
