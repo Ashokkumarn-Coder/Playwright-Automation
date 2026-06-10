@@ -43,7 +43,7 @@ test.only('End to End application', async ({page})=>
   await page.locator("#userEmail").fill("anshika@gmail.com");
   await page.locator("#userPassword").type("Iamking@000");
   await page.locator("[value='Login']").click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('networkidle'); //wait for page to finish all network requests before proceeding with the next steps in the test, which helps to ensure that the test runs smoothly and does not encounter any issues due to incomplete page loading 
   await page.locator(".card-body b").first().waitFor();
   const titles = await page.locator(".card-body b").allTextContents();
   console.log(titles); 
