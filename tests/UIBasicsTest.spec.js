@@ -186,7 +186,7 @@ test('UI controls', async ({page})=>
 });
 
   //handling child windows and tabs 
-test.only('Child windows and tabs', async ({browser})=>
+test('Child windows and tabs', async ({browser})=>
   {
     const context= await browser.newContext();  
     const page= await context.newPage();    

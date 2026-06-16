@@ -104,3 +104,15 @@ npx playwright test --list
 # Show Playwright version
 npx playwright --version
 ```
+
+## Debug
+````bash 
+# inspection will be opened 
+npx playwright test llc.spec.js --
+
+# we can locate the locator using inspection - while running the application only 
+
+## recoder and inspect
+
+npx playwright codegen URL  # url which we need to record  
+# we can validate and assertions

@@ -46,6 +46,9 @@ const config = defineConfig({
     // we can use firefox or webkit instead of chromium to test against those browsers as well
     headless: false, //setting headless mode to false, which means that the browser will be visible when running tests 
     //true means that the browser will run in headless mode, which is useful for running tests in a CI/CD pipeline or on a server without a graphical interface
+    screenshot: 'on', //setting the screenshot option to "only-on-failure", which means that a screenshot will be taken only when a test fails, which is useful for debugging and identifying issues in the tests
+    trace:'on', //setting the trace option to "on", which means that a trace will be recorded for each test, which is useful for debugging and identifying issues in the tests
+  
   },
 });
 module.exports = config //exporting the configuration object using module.exports, which is a common way to export modules in Node.js
