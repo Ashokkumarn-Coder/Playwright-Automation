@@ -106,17 +106,28 @@ test('Page Playwright Test', async ({page})=>
 });
 
 //test run in sequence, so the first test will run before the second test, and the second test will run after the first test has completed
-test('Browser context-validating Error Login', async ({browser})=>
+
+//to demonstrate route and obort methods, we will create a new test that will intercept the network requests and block the css files from loading
+test.only('Browser context-validating Error Login', async ({browser})=>
 {
     const context= await browser.newContext(); 
-    const page= await context.newPage(); 
+    const page= await context.newPage();
+   // page.route('**/*.css',route=>route.abort()); //blocking the css files from loading using the route() method, which allows us to intercept network requests and modify their behavior
+    //route() method is used to intercept network requests and modify their behavior, such as blocking certain requests, modifying request headers, or redirecting requests to a different URL
+    //in this case, we are using route() to block all CSS files from loading by matching any URL that ends with ".css" and calling the abort() method on the route object, which prevents the request from being sent to the server
+    //abort() method is used to cancel a network request, which can be useful for testing scenarios where we want to simulate a slow or unreliable network connection, or when we want to test how the application behaves when certain resources are not available
+    page.route('**/*.{jpg,png,jpeg}',route=>route.abort());
     const UserName =page.locator('#username');
     const Password= page.locator("[type='password']");
     const cardTitles= page.locator(".card-body a");
     const signIN=page.locator("#signInBtn");
-
-     
-    await page.goto("https://rahulshettyacademy.com/loginpagePractise/")
+    //it will give all network requests made by the page, which allows us to see what resources are being loaded and how long they take to load
+    page.on('request',request=> console.log(request.url()));
+     //page.on('request') event listener is used to listen for network requests made by the page, which allows us to log the URLs of the requests to the console for debugging purposes
+    page.on('response',response=> console.log(response.url(),response.status()));
+    //page.on('response') event listener is used to listen for network responses received by the page, which allows us to log the URLs and status codes of the responses to the console for debugging purposes
+    
+     await page.goto("https://rahulshettyacademy.com/loginpagePractise/")
     await UserName.fill("Ashok kumar N");
     await Password.fill("Learning@830$3mK2");
     await signIN.click();

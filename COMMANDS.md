@@ -108,7 +108,7 @@ npx playwright --version
 ## Debug
 ````bash 
 # inspection will be opened 
-npx playwright test llc.spec.js --
+npx playwright test llc.spec.js --debug
 
 # we can locate the locator using inspection - while running the application only 
 
@@ -116,3 +116,11 @@ npx playwright test llc.spec.js --
 
 npx playwright codegen URL  # url which we need to record  
 # we can validate and assertions
+
+npx playwright test MoreValidation --headed --debug 
+# Runs the browser in headed mode (visible browser window) and debug mode 
+
+#debugging works only for Ui not API 
+# to debug APi calls
+#go to package.json --->under scripts write in testes- and give commands
+#shift+control+p--> select npm debug mode-> put debug point and do it 
