@@ -21,6 +21,22 @@ test('popup validation',async({page})=>
     const textcheck = await framePage.locator(".text h2").textContent();
     console.log(textcheck.split("")[1]);
 
+})
 
+test("Screenshot and visual comparison",async({page})=>
+{
+        await page.goto("https://www.rahulshettyacademy.com/AutomationPractice/");
+        await expect(page.locator('#displayed-text')).toBeVisible();
+        await page.locator('#displayed-text').screenshot({path:'element.png'}); //to take a screenshot of the element and save it in the specified path
+        await page.locator('#hide-textbox').click();
+        await page.screenshot({path:'screenshot.png'}); //to take a screenshot of the page and save it in the specified path
+        await expect(page.locator('#displayed-text')).toBeHidden();
+})
 
-});
+//what is visual comparison in playwright? Visual comparison is a technique used to compare the visual appearance of a web page or an element on a web page with a reference image to detect any visual differences. 
+// It is used to ensure that the UI of a web application remains consistent across different versions and environments. Playwright provides built-in support for visual comparison through its screenshot and image comparison features.
+test.only('Visual comparison',async({page})=>
+{
+    await page.goto("https://www.google.com/");
+    expect(await page.screenshot()).toMatchSnapshot('google.png'); //to take a screenshot of the page and compare it with the reference image and save it in the specified path
+})
