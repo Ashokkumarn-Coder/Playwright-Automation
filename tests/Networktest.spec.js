@@ -4,6 +4,7 @@ const loginPayLoad = {userEmail:"anshika@gmail.com",userPassword:"Iamking@000"};
 const orderPayLoad = { orders: [{ country: "India", productOrderedId: "6960eac0c941646b7a8b3e68" }] };
 const fakePayLoadOrders = { data: [], message: "No Orders" };
  
+//beforeAll() method is used to run a function before all the tests in the file, which is useful when we want to set up some preconditions or perform some actions that are required for all the tests in the file
 let response;
 test.beforeAll(async () => {
   const apiContext = await request.newContext();

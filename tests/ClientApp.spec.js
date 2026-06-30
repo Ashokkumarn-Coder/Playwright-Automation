@@ -109,9 +109,7 @@ test('End to End application', async ({page})=>
         break;
       }
     }
-
     const orderIDdetails= await page.locator(".col-text").textContent(); //validation to verify that the correct order details are displayed in the order history page
     expect(orderId).toContain(orderIDdetails.trim()); //trim to remove the extra spaces from the orderId, which is useful when we want to compare the orderId with a specific value and want to ensure that the comparison is accurate
-
-
-});
+    
+  });

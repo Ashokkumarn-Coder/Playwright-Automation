@@ -35,6 +35,7 @@ test("Screenshot and visual comparison",async({page})=>
 
 //what is visual comparison in playwright? Visual comparison is a technique used to compare the visual appearance of a web page or an element on a web page with a reference image to detect any visual differences. 
 // It is used to ensure that the UI of a web application remains consistent across different versions and environments. Playwright provides built-in support for visual comparison through its screenshot and image comparison features.
+
 test.only('Visual comparison',async({page})=>
 {
     await page.goto("https://www.google.com/");
