@@ -7,7 +7,8 @@
 
 // @ts-check
 
-import{ defineConfig } from '@playwright/test'; 
+import{ defineConfig, devices } from '@playwright/test'; 
+import { trace } from 'console';
 //importing the defineConfig function from the Playwright library, which is used to define the configuration settings for the test runner
 
 /**
@@ -40,16 +41,41 @@ const config = defineConfig({
   },
 
   reporter: 'html', //specifying the reporter to use for test results, which is HTML in this case
-  use: {
-    //browserName: 'chromium', //specifying the default browser to use for all tests, which is Chromium in this case
+  projects:[
+    {
+      name:'safari execution',
+      use:{//browserName: 'chromium', //specifying the default browser to use for all tests, which is Chromium in this case
+    browserName: 'webkit', //specifying the default browser to use for all tests, which is Chromium in this case
+    // we can use firefox or webkit instead of chromium to test against those browsers as well
+    headless: true, //setting headless mode to true, which means that the browser will run in headless mode
+    //true means that the browser will run in headless mode, which is useful for running tests in a CI/CD pipeline or on a server without a graphical interface
+    screenshot: 'off', //setting screenshot mode to "off", which means a screenshot is not captured for every test
+    trace:'on', //setting the trace option to "on", which means that a trace will be recorded for each test, which is useful for debugging and identifying issues in the tests
+
+      }
+    },
+    {
+        name:'chrome execution',
+        use:{
+          //browserName: 'chromium', //specifying the default browser to use for all tests, which is Chromium in this case
     browserName: 'chromium', //specifying the default browser to use for all tests, which is Chromium in this case
     // we can use firefox or webkit instead of chromium to test against those browsers as well
-    headless: false, //setting headless mode to false, which means that the browser will be visible when running tests 
+    headless: false, //setting headless mode to true, which means that the browser will run in headless mode
     //true means that the browser will run in headless mode, which is useful for running tests in a CI/CD pipeline or on a server without a graphical interface
     screenshot: 'on', //setting screenshot mode to "on", which means a screenshot is captured for every test
-    trace:'on', //setting the trace option to "on", which means that a trace will be recorded for each test, which is useful for debugging and identifying issues in the tests
+    trace:'on',
+    video:"retain-on-failure", //setting the video option to "retain-on-failure", which means that a video recording of the test will be saved only if the test fails, which is useful for debugging and identifying issues in the tests
+    ignoreHTTPSErrors: true, //setting the ignoreHTTPSErrors option to true, which means that the browser will ignore any HTTPS errors that occur during the test, which is useful for testing applications that use self-signed certificates or have other SSL issues
+    permissions: ['geolocation'], //setting the permissions option to "geolocation", which means that the browser will allow the test to access the user's geolocation information, which is useful for testing applications that use location-based services
      viewport: { width: 1280, height: 720 }, //setting the default viewport size for all tests to 1280x720 pixels, which is a common resolution for desktop screens
-  },
+    //  ...devices['iPhone 11 Pro'], //setting the default device to emulate for all tests to iPhone 11 Pro, which allows us to test our web application on a mobile device without needing a physical device
+        }
+        //setting the trace option to "on", which means that a trace will be recorded for each test, which is useful for debugging and identifying issues in the tests
+      }
+
+    
+  ]
+  
 });
 module.exports = config //exporting the configuration object using module.exports, which is a common way to export modules in Node.js
 

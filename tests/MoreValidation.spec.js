@@ -1,4 +1,6 @@
 const{test,expect}=require('@playwright/test');
+
+test.describe.configure({mode:'parallel'}); //test.describe.configure() method is used to configure the test suite, which allows us to specify the mode in which the tests will be run, such as parallel or serial, and also allows us to set other options such as retries and timeouts
 test('popup validation',async({page})=>
 {
     await page.goto("https://www.rahulshettyacademy.com/AutomationPractice/");

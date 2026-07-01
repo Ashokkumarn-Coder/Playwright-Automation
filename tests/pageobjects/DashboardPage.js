@@ -34,7 +34,7 @@ async navigateToCart()
     await this.cart.click(); //click() method is used to simulate a mouse click on the element, which is useful when we want to interact with buttons, links, or other clickable elements on the page
 }
 
- async navigateToOrders()
+async navigateToOrders()
  {
   await this.orders.click();
  }
