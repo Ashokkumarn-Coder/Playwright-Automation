@@ -3,6 +3,7 @@ const {LoginPage} = require('./LoginPage');
 const {DashboardPage} = require('./DashboardPage');
 const {CartPage} = require('./CartPage');
 const {OrdersReviewPage} = require('./OrdersReviewPage');
+const {OrdersHistoryPage} = require('./OrderHistoryPage');
 
 class POManager 
 {
@@ -13,6 +14,7 @@ class POManager
         this.dashboardPage = new DashboardPage(page); //creating an instance of the DashboardPage class and passing
          this.cartPage = new CartPage(this.page);
          this.ordersReviewPage = new OrdersReviewPage(this.page);
+            this.ordersHistoryPage = new OrdersHistoryPage(this.page);
     }
 
     getLoginPage()
@@ -31,6 +33,9 @@ class POManager
     getOrdersReviewPage()
     {
         return this.ordersReviewPage;
+    }
+     getOrdersHistoryPage() {
+        return this.ordersHistoryPage;
     }
 
 }

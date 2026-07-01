@@ -3,7 +3,8 @@ class DashboardPage {
         this.page = page;
         this.products = page.locator(".card-body");
         this.productsText = page.locator(".card-body b");
-        this.cart=page.locator("[routerlink*='cart']")
+      this.cart=page.locator("[routerlink*='cart']")
+      this.orders=page.locator("button[routerlink*='myorders']")
     }
 
 async searchProduct(productName) 
@@ -32,5 +33,10 @@ async navigateToCart()
 {
     await this.cart.click(); //click() method is used to simulate a mouse click on the element, which is useful when we want to interact with buttons, links, or other clickable elements on the page
 }
+
+ async navigateToOrders()
+ {
+  await this.orders.click();
+ }
 }
 module.exports = { DashboardPage }; //exporting the DashboardPage class so that it can be used in other files, which allows us to reuse the code and avoid duplication, making our tests more maintainable and easier to read.
