@@ -4,7 +4,7 @@ const { POManager } = require('./pageobjects/POManager');
 const testDataSet = require('./Utils/placeorderTestData.json');
 
 for (const data of testDataSet) { //looping through the test data set and running the test for each data set
-test(`End to End application ${data.username} | ${data.productName}`, async ({ page }) => {
+test(`@web End to End application ${data.username} | ${data.productName}`, async ({ page }) => {
     const poManager = new POManager(page);
 
     const loginPage = poManager.getLoginPage();

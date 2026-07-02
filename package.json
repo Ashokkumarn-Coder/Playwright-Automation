@@ -4,16 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "test": "npx playwright test tests/WebAPiPart1.spec.js --headed"
+    "test": "npx playwright test",
+    "regression": "npx playwright test",
+    "webTests": "npx playwright test --grep \"@web\"",
+    "webList": "npx playwright test --grep \"@web\" --list",
+    "safariTests": "npx playwright test --config \"playwright.config copy.js\" --project=\"safari execution\"",
+    "chromeTests": "npx playwright test --config \"playwright.config copy.js\" --project=\"chrome execution\"",
+    "htmlReport": "npx playwright show-report",
+    "allureGenerate": "npx allure generate ./allure-results --clean -o ./allure-report",
+    "allureOpen": "npx allure open ./allure-report",
+    "allureServe": "npx allure serve ./allure-results"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.0"
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^25.6.0",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2"
   },
   "dependencies": {
-    "exceljs": "^4.4.0"
+    "@cucumber/cucumber": "^13.0.0",
+    "exceljs": "^3.4.0"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.features": "cucumber"
+  },
+  "cucumberautocomplete.steps": [
+    "features/step_definitions/**/*.js",
+    "tests/step_definitions/**/*.js"
+  ],
+  "cucumberautocomplete.syncfeatures": "features/**/*.features"
+}

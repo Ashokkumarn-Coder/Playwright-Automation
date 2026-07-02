@@ -148,7 +148,215 @@ Note:
 
 The copy option is meant to accelerate authoring, but maintainability comes from converting generated lines into reusable POM methods and data-driven patterns.
 
+## Cucumber.js (Features and Steps)
+
+Official documentation:
+
+https://cucumber.io/docs/
+
+What Cucumber.js gives you:
+
+1. Behavior-driven format using Gherkin
+2. Readable test scenarios for QA, dev, and business teams
+3. Reusable step definitions mapped to plain-language steps
+
+Key parts:
+
+1. Feature file (`.feature`)
+   - Contains user-readable scenarios written with `Feature`, `Scenario`, `Given`, `When`, `Then`.
+
+2. Step definition file
+   - Contains JavaScript functions that implement each Given/When/Then step.
+
+Simple example feature:
+
+```gherkin
+Feature: Login
+
+  Scenario: Valid user login
+    Given user opens login page
+    When user enters valid credentials
+    Then user should see dashboard
+```
+
+Matching step definitions (example):
+
+```js
+Given('user opens login page', async function () {
+  // open page
+});
+
+When('user enters valid credentials', async function () {
+  // enter username/password
+});
+
+Then('user should see dashboard', async function () {
+  // assertion
+});
+```
+
+How this helps in automation projects:
+
+1. Scenarios are easier to review by non-technical stakeholders.
+2. Step definitions can be reused across multiple scenarios.
+3. Clear separation between test intent (feature file) and implementation (step code).
+
 ## How to Run
+
+## Run Through package.json Scripts
+
+You can drive execution from `package.json` scripts so commands are short, consistent, and easy for team usage/CI.
+
+What we changed in scripts:
+
+1. Added standard test entry: `test`, `regression`
+2. Added tag-based scripts: `webTests`, `webList`
+3. Added project-based scripts: `safariTests`, `chromeTests`
+4. Added report scripts: `htmlReport`, `allureGenerate`, `allureOpen`, `allureServe`
+5. Fixed script issues:
+  - corrected typo `--prohject` to `--project`
+  - quoted config filename with spaces (`"playwright.config copy.js"`)
+
+Why this is useful:
+
+1. No need to remember long Playwright commands
+2. Reduces command typos across team
+3. Same command works locally and in CI
+4. Easier onboarding for new contributors
+
+How to run in terminal:
+
+```bash
+npm run test
+npm run regression
+npm run webTests
+npm run webList
+npm run safariTests
+npm run chromeTests
+npm run htmlReport
+npm run allureGenerate
+npm run allureOpen
+npm run allureServe
+```
+
+Pass extra Playwright args through npm scripts:
+
+```bash
+npm run webTests -- --list
+npm run regression -- --headed
+```
+
+## Generate HTML and Allure Report
+
+Install required packages:
+
+```bash
+npm i -D @playwright/test allure-playwright
+```
+
+Configure reporters in `playwright.config.js`:
+
+```js
+reporter: [
+  ['html'],
+  ['allure-playwright']
+]
+```
+
+Run tests to generate reports:
+
+```bash
+npx playwright test
+```
+
+If Playwright shows "Executable doesn't exist", install browsers first:
+
+```bash
+npx playwright install
+```
+
+Open Playwright HTML report:
+
+```bash
+npx playwright show-report
+```
+
+Generate and open Allure report:
+
+```bash
+npx allure generate ./allure-results --clean -o ./allure-report
+npx allure open ./allure-report
+```
+
+Quick option (generate + open in one step):
+
+```bash
+npx allure serve ./allure-results
+```
+
+Note:
+
+If Allure command is not found, install it once:
+
+```bash
+npm i -D allure-commandline
+```
+
+## Tag-Based Run (@web)
+
+Playwright supports running tests by tags using `--grep`.
+
+How to add a tag in test title:
+
+```js
+test('@web should load homepage', async ({ page }) => {
+  // test steps
+});
+```
+
+Run only `@web` tagged tests:
+
+```bash
+npx playwright test --grep "@web"
+```
+
+Run `@web` tagged tests with line + Allure reporter:
+
+```bash
+npx playwright test --grep "@web" --reporter=line,allure-playwright
+```
+
+Run `@web` tags from a specific file:
+
+```bash
+npx playwright test tests/UIBasicsTest.spec.js --grep "@web"
+```
+
+Exclude `@web` tests:
+
+```bash
+npx playwright test --grep-invert "@web"
+```
+
+Run multiple tags (example: web or api):
+
+```bash
+npx playwright test --grep "@web|@api"
+```
+
+Tip:
+
+Keep tags consistent (for example `@web`, `@api`, `@smoke`, `@regression`) so selective execution stays simple and predictable.
+
+Tag troubleshooting:
+
+1. Tags are case-sensitive (`@web` is different from `@Web`).
+2. If any test uses `test.only(...)`, Playwright prioritizes only-tests and grep results may look empty for other tags.
+3. If grep shows no tests, run with `--list` first to validate discovery:
+
+```bash
+npx playwright test --grep "@web" --list
+```
 
 ## Automatic Screenshots (on/off/only-on-failure)
 
@@ -816,6 +1024,118 @@ Open HTML report:
 ```bash
 npx playwright show-report
 ```
+
+## Jenkins CI Setup (Detailed)
+
+This section explains how to run this Playwright project from Jenkins on a local server, including parameterized runs.
+
+### 1. Install Jenkins (Generic Java Package)
+
+1. Go to Jenkins download page.
+2. Download the Generic Java package (`jenkins.war`).
+3. Keep Java installed and available in PATH.
+
+Start Jenkins locally (example port 9090):
+
+```bash
+java -jar jenkins.war -httpPort=9090
+```
+
+What happens next:
+
+1. Jenkins initializes.
+2. Open browser at `http://localhost:9090`.
+3. Complete unlock + plugin setup.
+4. Create admin user.
+
+### 2. Create a New Jenkins Job
+
+1. Click New Item.
+2. Enter job name.
+3. Choose Freestyle project.
+4. Click OK.
+
+### 3. Configure Source Code
+
+Option A (recommended): Git repository
+
+1. In Source Code Management, select Git.
+2. Paste repository URL.
+3. Add credentials if needed.
+
+Option B: Custom workspace
+
+1. In Advanced Project Options, enable Use custom workspace.
+2. Provide local project path.
+
+### 4. Add Build Step
+
+If Jenkins agent is Linux/macOS:
+
+1. Build section -> Add build step -> Execute shell.
+2. Example commands:
+
+```bash
+npm ci
+npx playwright install
+npm run regression
+```
+
+If Jenkins agent is Windows:
+
+1. Build section -> Add build step -> Execute Windows batch command.
+2. Example commands:
+
+```bat
+call npm ci
+call npx playwright install
+call npm run regression
+```
+
+Save job and click Build Now.
+
+### 5. Update Command Later via Configure
+
+You can always go to Configure and change the build command in:
+
+1. Execute shell, or
+2. Execute Windows batch command.
+
+### 6. Parameterized Project (Choice Parameter)
+
+To run different suites/tags from one Jenkins job:
+
+1. Open Configure.
+2. Enable This project is parameterized.
+3. Add Parameter -> Choice Parameter.
+4. Example:
+  - Name: `SUITE`
+  - Choices: `regression`, `webTests`, `safariTests`, `chromeTests`
+
+Then replace fixed command with parameterized command.
+
+For Execute shell (Linux/macOS):
+
+```bash
+npm ci
+npx playwright install
+npm run $SUITE
+```
+
+For Execute Windows batch command:
+
+```bat
+call npm ci
+call npx playwright install
+call npm run %SUITE%
+```
+
+Important variable rule:
+
+1. Shell uses `$PARAM`.
+2. Windows batch uses `%PARAM%`.
+
+After this, Jenkins will show Build with Parameters and let you choose the suite before each run.
 
 ## JavaScript Files Explained
 

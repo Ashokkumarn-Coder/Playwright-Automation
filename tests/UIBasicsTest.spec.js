@@ -8,7 +8,7 @@ const {test, expect}= require('@playwright/test');
 //async function is used to define an asynchronous function that can contain await expressions
 //await is used to wait for a promise to resolve before proceeding with the next line of code
 
-test('First Playwright Test', async ({browser})=> 
+test(' @web First Playwright Test', async ({browser})=> 
     //outers structure of the test //async function is used to define an asynchronous function that can contain await expressions
     //ananymous function is used to define a function without a name, which is useful for writing short, one-off functions that do not need to be reused elsewhere in the code
     //fixture is used to set up the test environment and provide any necessary data or resources for the test to run
@@ -108,7 +108,7 @@ test('Page Playwright Test', async ({page})=>
 //test run in sequence, so the first test will run before the second test, and the second test will run after the first test has completed
 
 //to demonstrate route and obort methods, we will create a new test that will intercept the network requests and block the css files from loading
-test.only('Browser context-validating Error Login', async ({browser})=>
+test('Browser context-validating Error Login', async ({browser})=>
 {
     const context= await browser.newContext(); 
     const page= await context.newPage();

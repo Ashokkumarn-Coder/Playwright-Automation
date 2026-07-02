@@ -1,7 +1,9 @@
 const{test,expect}=require('@playwright/test');
 
-test.describe.configure({mode:'parallel'}); //test.describe.configure() method is used to configure the test suite, which allows us to specify the mode in which the tests will be run, such as parallel or serial, and also allows us to set other options such as retries and timeouts
-test('popup validation',async({page})=>
+//test.describe.configure({mode:'parallel'}); //test.describe.configure() method is used to configure the test suite, which allows us to specify the mode in which the tests will be run, such as parallel or serial, and also allows us to set other options such as retries and timeouts
+test.describe.configure({mode:'serial'}); //test.describe.configure() method is used to configure the test suite, which allows us to specify the mode in which the tests will be run, such as parallel or serial, and also allows us to set other options such as retries and timeouts
+
+test(' @web popup validation',async({page})=>
 {
     await page.goto("https://www.rahulshettyacademy.com/AutomationPractice/");
     // await page.goto("https://google.com");
@@ -38,7 +40,7 @@ test("Screenshot and visual comparison",async({page})=>
 //what is visual comparison in playwright? Visual comparison is a technique used to compare the visual appearance of a web page or an element on a web page with a reference image to detect any visual differences. 
 // It is used to ensure that the UI of a web application remains consistent across different versions and environments. Playwright provides built-in support for visual comparison through its screenshot and image comparison features.
 
-test.only('Visual comparison',async({page})=>
+test('Visual comparison',async({page})=>
 {
     await page.goto("https://www.google.com/");
     expect(await page.screenshot()).toMatchSnapshot('google.png'); //to take a screenshot of the page and compare it with the reference image and save it in the specified path
