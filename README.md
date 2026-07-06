@@ -246,6 +246,42 @@ npm run webTests -- --list
 npm run regression -- --headed
 ```
 
+## Run in Headless and Headed Mode
+
+Playwright default mode is headless (browser UI is hidden).
+
+Headless mode examples:
+
+```bash
+npx playwright test
+npm run regression
+```
+
+Headed mode examples (browser UI visible):
+
+```bash
+npx playwright test --headed
+npm run regression -- --headed
+```
+
+For Cucumber scenarios that use Playwright in step definitions:
+
+```bash
+npx cucumber-js features/Ecommerce.feature --require features/step_definitions/steps.js
+```
+
+To run Cucumber in headed mode, make sure your browser launch uses:
+
+```js
+await playwright.chromium.launch({ headless: false })
+```
+
+To run Cucumber in headless mode, use:
+
+```js
+await playwright.chromium.launch({ headless: true })
+```
+
 ## Generate HTML and Allure Report
 
 Install required packages:
