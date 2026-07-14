@@ -48,8 +48,7 @@ const config = defineConfig({
     //true means that the browser will run in headless mode, which is useful for running tests in a CI/CD pipeline or on a server without a graphical interface
     screenshot: 'on', //setting screenshot mode to "on", which means a screenshot is captured for every test
     trace:'on', //setting the trace option to "on", which means that a trace will be recorded for each test, which is useful for debugging and identifying issues in the tests
-     viewport: { width: 1280, height: 720 }, //setting the default viewport size for all tests to 1280x720 pixels, which is a common resolution for desktop screens
-  },
+      },
 });
 module.exports = config //exporting the configuration object using module.exports, which is a common way to export modules in Node.js
 

@@ -28,10 +28,12 @@ import { trace } from 'console';
 
 const config = defineConfig({
   testDir: './tests', //only test will be executed from this directory, which is where we will write our test files
+  retries: 1, //setting the number of retries for failed tests to 1, which means that if a test fails, it will be retried once before being marked as failed
   //use:use is used to specify the default settings for all tests, such as the browser to use, the viewport size, and the base URL for the tests
   //timeout is used to specify the maximum time that a test can run before it is considered to have failed, which helps to prevent tests from hanging indefinitely 
   // and allows us to identify and fix issues more quickly
   //deafult timeout for each test is 30 seconds, but we can also specify a custom timeout for individual tests using the test.setTimeout() method
+  workers: 3, //setting the number of workers to 1, which means that tests will be run sequentially rather than in parallel, which can be useful for tests that have dependencies or require a specific order of execution
   timeout: 40* 1000, //setting the default timeout for all tests to 30 seconds
   //expect:expect is used to specify the default settings for the expect assertions, such as the timeout for waiting for an element to appear on the page
   //global timeout for expect assertions is 5 seconds, but we can also specify a custom timeout for individual assertions using the expect.setTimeout() method

@@ -13,7 +13,8 @@
     "htmlReport": "npx playwright show-report",
     "allureGenerate": "npx allure generate ./allure-results --clean -o ./allure-report",
     "allureOpen": "npx allure open ./allure-report",
-    "allureServe": "npx allure serve ./allure-results"
+    "allureServe": "npx allure serve ./allure-results",
+    "CucumberRegression": "npx cucumber-js --tags \"@Regression\" --format html:cucumber-report.html"
   },
   "keywords": [],
   "author": "",
